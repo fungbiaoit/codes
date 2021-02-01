@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置为UserDao接口方法提供sql语句配置 -->
+<mapper namespace="com.demo.dao.UserDao">
+
+    <select id="findUserByUserName" resultType="User" parameterType="java.lang.String">
+        SELECT * FROM user WHERE username=#{username}
+    </select>
+
+    <select id="findAllUserType" resultType="UserType">
+        select * from usertype;
+    </select>
+
+    <select id="findAll" resultType="User">
+        select *,t.name as typeName from user u inner join usertype t on u.typeId=t.id
+        <where>
+            <if test="typeId!=null">
+                and u.typeId=#{typeId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addUser">
+        insert into user(username,age,sex,city,birthday,typeId) values(#{username},
+        #{age},#{sex},#{city},#{birthday},#{typeId})
+    </insert>
+
+    <update id="updateUser">
+        update user
+        <set>
+            <if test="username!=null and username!=''">
+                username=#{username},
+            </if>
+            <if test="age!=null">
+                age=#{age},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+            <if test="city!=null and city!=''">
+                city=#{city},
+            </if>
+            <if test="birthday!=null">
+                birthday=#{birthday},
+            </if>
+            <if test="typeId!=null">
+                typeId=#{typeId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+</mapper>
